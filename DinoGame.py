@@ -1,7 +1,14 @@
 
+# Game speed variables
+INITIAL_SPEED = 5
+SPEED_INCREASE = 0.1
+MAX_SPEED = 15
+game_speed = INITIAL_SPEED
 
 import pygame
 import random
+import time
+import math
 
 # Initialize Pygame
 pygame.init()
@@ -31,7 +38,7 @@ obstacle_width = 30
 obstacle_height = 50
 obstacle_x = WINDOW_WIDTH
 obstacle_y = WINDOW_HEIGHT - obstacle_height
-obstacle_speed = 5
+obstacle_speed = game_speed  # Use game_speed instead of fixed speed
 
 # Game variables
 score = 0
@@ -54,6 +61,7 @@ while running:
                 obstacle_x = WINDOW_WIDTH
                 dino_y = WINDOW_HEIGHT - dino_height
                 dino_velocity = 0
+                game_speed = INITIAL_SPEED  # Reset game speed
 
     if not game_over:
         # Update dinosaur position
@@ -63,11 +71,13 @@ while running:
             dino_y = WINDOW_HEIGHT - dino_height
             dino_velocity = 0
 
-        # Update obstacle position
-        obstacle_x -= obstacle_speed
+        # Update obstacle position and game speed
+        obstacle_x -= game_speed  # Use game_speed instead of obstacle_speed
         if obstacle_x < -obstacle_width:
             obstacle_x = WINDOW_WIDTH
             score += 1
+            # Increase game speed with each obstacle cleared
+            game_speed = min(game_speed + SPEED_INCREASE, MAX_SPEED)
 
         # Check for collision
         dino_rect = pygame.Rect(dino_x, dino_y, dino_width, dino_height)
